@@ -1,9 +1,9 @@
-const todoinput = document.getElementById("todo-input");
-const addbtn = document.getElementById("addbtn");
-const todoList = document.querySelector(".todo-list");
+const todoinput = document.getElementById("input");
+const addbtn = document.getElementById("btn");
+const todoList = document.querySelector(".list");
 
 addbtn.addEventListener('click', addData);
-let todos = loadTodos();
+let todos = store();
 
 function addData() {
     const uniqueId = Math.floor(Math.random() * 99999);
@@ -16,28 +16,28 @@ function addData() {
             done: false
         };
         todos.push(newTodo);
-        saveTodos(todos);
-        renderTodos();
+        save(todos);
+        conclus();
         todoinput.value = '';
     }
 }
 
-function saveTodos(todos) {
+function save(todos) {
     localStorage.setItem('todos', JSON.stringify(todos));
 }
 
-function loadTodos() {
+function store() {
     const todosString = localStorage.getItem('todos');
     return todosString ? JSON.parse(todosString) : [];
 }
 
-function renderTodos() {
+function conclus() {
     todoList.innerHTML = '';
     todos.forEach(todo => {
         const todoItem = document.createElement('li');
         const deleteButton = document.createElement('button');
-        deleteButton.innerHTML = '  <i class="fa fa-trash"></i>';
-        deleteButton.addEventListener('click', deleteTodo);
+        deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
+        deleteButton.addEventListener('click', deletedata);
         const textSpan = document.createElement('span');
         textSpan.textContent = todo.text;
         todoItem.appendChild(textSpan);
@@ -59,14 +59,14 @@ function toggleTodo() {
         }
         return todo;
     });
-    saveTodos(todos);
-    renderTodos();
+    save(todos);
+    conclus();
 }
 
-function deleteTodo() {
+function deletedata() {
     const id = parseInt(this.parentElement.getAttribute('data-id'));
     todos = todos.filter(todo => todo.id !== id);
     saveTodos(todos);
-    renderTodos();
+    conclus();
 }
-renderTodos();
+conclus();
